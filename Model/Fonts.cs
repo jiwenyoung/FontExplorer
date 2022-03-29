@@ -18,31 +18,68 @@ namespace FontExplorer.Model
             }
             else
             {
-                Folder = "";
-                return false;
+                if (File.Exists(dir))
+                {
+                    Folder = dir;
+                    return true;
+                }
+                else
+                {
+                    Folder = "";
+                    return false;
+                }
             }
         }
 
         internal static async Task<bool> Fill() {
             if(Folder != "")
             {
-                string[] files = await Task.Run(() => { return Directory.GetFiles(Folder); });
-                foreach (string file in files)
+                bool IsFileOrFolder = false;
+                if (Directory.Exists(Folder))
                 {
-                    if (File.Exists(file))
+                    IsFileOrFolder = true;
+                    Collection.Clear();
+                    string[] files = await Task.Run(() => { return Directory.GetFiles(Folder); });
+                    foreach (string file in files)
                     {
-                        if(file.EndsWith(".otf") || file.EndsWith(".ttf"))
+                        if (File.Exists(file))
                         {
-                            MyFont myfont = new(file);
-                            Collection.Add(myfont);
+                            if(file.EndsWith(".otf") || file.EndsWith(".ttf"))
+                            {
+                                MyFont myfont = new(file);
+                                Collection.Add(myfont);
+                            }
                         }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    return true; 
+                }
+                if (File.Exists(Folder))
+                {
+                    IsFileOrFolder= true;
+                    Collection.Clear();  
+                    string file = Folder;
+                    if(file.EndsWith(".otf") || file.EndsWith(".ttf"))
+                    {
+                        MyFont myfont = new(file);
+                        Collection.Add(myfont);
                     }
                     else
                     {
                         return false;
                     }
                 }
-                return true; 
+                if (IsFileOrFolder)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
@@ -50,7 +87,7 @@ namespace FontExplorer.Model
             }
         }
 
-        internal static bool RegistorFontAsync(MyFont myFont) { 
+        internal static bool RegistorFont(MyFont myFont) { 
             LoadedFonts.Insert(0,myFont);
             return true; 
         }

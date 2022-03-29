@@ -74,7 +74,7 @@ namespace FontExplorer.View
         {
             if (MyFont.Load())
             {
-                if (Fonts.RegistorFontAsync(MyFont))
+                if (Fonts.RegistorFont(MyFont))
                 {
                     SetColorBlockStatus(true);
                     this.LoadBtn.Hide();

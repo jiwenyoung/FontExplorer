@@ -1,4 +1,5 @@
 ﻿using FontExplorer.Model;
+using System.Diagnostics;
 
 namespace FontExplorer.View
 {
@@ -8,6 +9,8 @@ namespace FontExplorer.View
         private readonly List<FontBox> WhatIsInFontContainer = new();
         private string CurrentFolder = "";
         private bool IsInFavorite = false;
+        private bool IsFromSingleFile = false;
+        private string CurrentSingleFile = "";
         private Panel? DragHerePanel = new();
 
         public MainForm()
@@ -220,6 +223,17 @@ namespace FontExplorer.View
             }
         }
 
+        internal void LoadSingleFont(string file)
+        {
+            MyFont myfont = new(file);
+            FontBox fontbox = new(myfont);
+            fontbox.TopLevel = false;
+            this.FontContainer.Controls.Clear();
+            this.FontContainer.Controls.Add(fontbox);
+            ShowHeaderText(file);
+            fontbox.Show();
+        }
+
         internal async Task<bool> Notice(string notice)
         {
             Panel NoticeBox = new();
@@ -307,10 +321,22 @@ namespace FontExplorer.View
                 string folder = "";
                 if (IsInFavorite)
                 {
-                    folder = CurrentFolder;
-                    IsInFavorite = false;
-                    ShowHeaderTextInputBox(folder);
-                    FillFontContainerWhenRouteBackFromFavorites();
+                    if (IsFromSingleFile)
+                    {
+                        string file = CurrentSingleFile;
+                        ShowFontContainer();
+                        LoadSingleFont(file);
+                        IsFromSingleFile = true;
+                        CurrentSingleFile = file;
+                        IsInFavorite = false;
+                    }
+                    else
+                    {
+                        folder = CurrentFolder;
+                        IsInFavorite = false;
+                        ShowHeaderTextInputBox(folder);
+                        FillFontContainerWhenRouteBackFromFavorites();
+                    }
                 }
                 else
                 {
@@ -469,7 +495,32 @@ namespace FontExplorer.View
                         }
                         else
                         {
-                            await Notice("This folder does not exist");
+                            if (File.Exists(folder))
+                            {
+                                string file = folder;
+                                if (Fonts.Init(file))
+                                {
+                                    if (await Fonts.Fill())
+                                    {
+                                        ShowFontContainer();
+                                        LoadSingleFont(file);
+                                        IsFromSingleFile = true;
+                                        CurrentSingleFile = file;
+                                    }
+                                    else
+                                    {
+                                        await Notice("Fail to load this font");
+                                    }
+                                }
+                                else
+                                {
+                                    await Notice("Fail to load this font");
+                                }
+                            }
+                            else
+                            {
+                                await Notice("This folder does not exist");
+                            }
                         }
                     }
                     else
