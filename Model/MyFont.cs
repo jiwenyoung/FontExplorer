@@ -37,33 +37,47 @@ namespace FontExplorer.Model
 
         internal bool Load()
         {
-            string fontfile = string.Format("{0}", this.Path);
-            int result = AddFontResource(fontfile);
-            int error = Marshal.GetLastWin32Error();
-            if (result != 0)
+            string fontfile = this.Path;
+            if (File.Exists(fontfile))
             {
-                return true;
+                int result = AddFontResource(fontfile);
+                int error = Marshal.GetLastWin32Error();
+                if (result != 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    Debug.WriteLine(new Win32Exception(error).Message);
+                    return false;
+                }
             }
             else
             {
-                Debug.WriteLine(new Win32Exception(error).Message);
                 return false;
             }
         }
 
         internal bool Unload()
         {
-            string fontfile = string.Format("{0}", this.Path);
-            int result = RemoveFontResource(fontfile);
-            int error = Marshal.GetLastWin32Error();
-            if (result != 0)
+            string fontfile = this.Path;
+            if (File.Exists(fontfile) == false)
             {
-                return true;
+                return false;
             }
             else
             {
-                Debug.WriteLine(new Win32Exception(error).Message);
-                return false;
+                int result = RemoveFontResource(fontfile);
+                int error = Marshal.GetLastWin32Error();
+                if (result != 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    Debug.WriteLine(new Win32Exception(error).Message);
+                    return false;
+                }
             }
         }
 

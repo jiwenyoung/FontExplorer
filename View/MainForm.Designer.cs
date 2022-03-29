@@ -79,7 +79,7 @@
             this.FontContainer.Location = new System.Drawing.Point(0, 80);
             this.FontContainer.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
             this.FontContainer.Name = "FontContainer";
-            this.FontContainer.Size = new System.Drawing.Size(584, 431);
+            this.FontContainer.Size = new System.Drawing.Size(784, 431);
             this.FontContainer.TabIndex = 1;
             this.FontContainer.Scroll += new System.Windows.Forms.ScrollEventHandler(this.FontContainer_Scroll);
             this.FontContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.FontContainer_DragDrop);
@@ -223,7 +223,7 @@
             this.HeaderPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.HeaderPanel.Location = new System.Drawing.Point(200, 0);
             this.HeaderPanel.Name = "HeaderPanel";
-            this.HeaderPanel.Size = new System.Drawing.Size(584, 50);
+            this.HeaderPanel.Size = new System.Drawing.Size(784, 50);
             this.HeaderPanel.TabIndex = 1;
             // 
             // HeaderTextInputBox
@@ -255,7 +255,7 @@
             this.SearchBox.Controls.Add(this.SearchInput);
             this.SearchBox.Controls.Add(this.SearchLabel);
             this.SearchBox.Dock = System.Windows.Forms.DockStyle.Right;
-            this.SearchBox.Location = new System.Drawing.Point(384, 0);
+            this.SearchBox.Location = new System.Drawing.Point(584, 0);
             this.SearchBox.Name = "SearchBox";
             this.SearchBox.Size = new System.Drawing.Size(200, 80);
             this.SearchBox.TabIndex = 1;
@@ -302,7 +302,7 @@
             this.BodyPanel.Location = new System.Drawing.Point(200, 50);
             this.BodyPanel.Margin = new System.Windows.Forms.Padding(0);
             this.BodyPanel.Name = "BodyPanel";
-            this.BodyPanel.Size = new System.Drawing.Size(584, 511);
+            this.BodyPanel.Size = new System.Drawing.Size(784, 511);
             this.BodyPanel.TabIndex = 2;
             // 
             // TxtContainer
@@ -312,7 +312,7 @@
             this.TxtContainer.Dock = System.Windows.Forms.DockStyle.Top;
             this.TxtContainer.Location = new System.Drawing.Point(0, 0);
             this.TxtContainer.Name = "TxtContainer";
-            this.TxtContainer.Size = new System.Drawing.Size(584, 80);
+            this.TxtContainer.Size = new System.Drawing.Size(784, 80);
             this.TxtContainer.TabIndex = 0;
             // 
             // SampleExampleBox
@@ -323,7 +323,7 @@
             this.SampleExampleBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SampleExampleBox.Location = new System.Drawing.Point(0, 0);
             this.SampleExampleBox.Name = "SampleExampleBox";
-            this.SampleExampleBox.Size = new System.Drawing.Size(384, 80);
+            this.SampleExampleBox.Size = new System.Drawing.Size(584, 80);
             this.SampleExampleBox.TabIndex = 1;
             // 
             // SampleTextInputUnderLine
@@ -362,12 +362,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(110)))), ((int)(((byte)(114)))));
-            this.ClientSize = new System.Drawing.Size(784, 561);
+            this.ClientSize = new System.Drawing.Size(984, 561);
             this.Controls.Add(this.BodyPanel);
             this.Controls.Add(this.HeaderPanel);
             this.Controls.Add(this.BarPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(800, 600);
+            this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Font Explorer";

@@ -31,14 +31,17 @@ namespace FontExplorer.Model
             }
         }
 
-        internal static async Task<bool> Fill() {
+        internal static async Task<bool> Fill(bool isClear = true) {
             if(Folder != "")
             {
                 bool IsFileOrFolder = false;
                 if (Directory.Exists(Folder))
                 {
                     IsFileOrFolder = true;
-                    Collection.Clear();
+                    if (isClear)
+                    {
+                        Collection.Clear();
+                    }
                     string[] files = await Task.Run(() => { return Directory.GetFiles(Folder); });
                     foreach (string file in files)
                     {
@@ -60,7 +63,10 @@ namespace FontExplorer.Model
                 if (File.Exists(Folder))
                 {
                     IsFileOrFolder= true;
-                    Collection.Clear();  
+                    if (isClear)
+                    {
+                        Collection.Clear();  
+                    }
                     string file = Folder;
                     if(file.EndsWith(".otf") || file.EndsWith(".ttf"))
                     {

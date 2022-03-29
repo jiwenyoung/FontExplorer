@@ -10,12 +10,26 @@ namespace FontExplorer.View
         private string CurrentFolder = "";
         private bool IsInFavorite = false;
         private bool IsFromSingleFile = false;
+        private bool IsFromMultiFile = false;
         private string CurrentSingleFile = "";
         private Panel? DragHerePanel = new();
 
         public MainForm()
         {
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.DoubleBuffer, true);
             InitializeComponent();
+        }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;
+                return cp;
+            }
         }
 
         private void SetColor()
@@ -87,6 +101,8 @@ namespace FontExplorer.View
 
         private void Responsive()
         {
+            this.HeaderTextInputBox.Width = this.HeaderPanel.Width - 40;
+
             this.SampleExampleBox.Width = (int)(this.TxtContainer.Width * 0.7);
             this.SearchBox.Width = (int)(this.TxtContainer.Width * 0.3);
             int SampleExampleWidth = this.SampleExampleBox.Width - 40;
@@ -228,10 +244,35 @@ namespace FontExplorer.View
             MyFont myfont = new(file);
             FontBox fontbox = new(myfont);
             fontbox.TopLevel = false;
+            fontbox.Show();
+            WhatIsInFontContainer.Clear();
             this.FontContainer.Controls.Clear();
             this.FontContainer.Controls.Add(fontbox);
-            ShowHeaderText(file);
-            fontbox.Show();
+            WhatIsInFontContainer.Add(fontbox);
+            ShowHeaderTextInputBox(file);
+        }
+
+        internal async void LoadMultiFont(List<string> files)
+        {
+            ShowHeaderText("Multi Files");
+            ClearFontContainer();
+            WhatIsInFontContainer.Clear();
+            foreach (string file in files)
+            {
+                if (Fonts.Init(file))
+                {
+                    if (await Fonts.Fill())
+                    {
+                        ShowFontContainer();
+                        MyFont myfont = new(file);
+                        FontBox fontBox = new(myfont);
+                        fontBox.TopLevel = false;
+                        this.FontContainer.Controls.Add(fontBox);
+                        WhatIsInFontContainer.Add(fontBox);
+                        fontBox.Show();
+                    }
+                }
+            }
         }
 
         internal async Task<bool> Notice(string notice)
@@ -327,15 +368,35 @@ namespace FontExplorer.View
                         ShowFontContainer();
                         LoadSingleFont(file);
                         IsFromSingleFile = true;
+                        IsFromMultiFile = false;
                         CurrentSingleFile = file;
                         IsInFavorite = false;
                     }
                     else
                     {
-                        folder = CurrentFolder;
-                        IsInFavorite = false;
-                        ShowHeaderTextInputBox(folder);
-                        FillFontContainerWhenRouteBackFromFavorites();
+                        if (IsFromMultiFile)
+                        {
+
+                            IsInFavorite = false;
+                            IsFromMultiFile = true;
+                            IsFromSingleFile = false;
+                            this.FontContainer.Controls.Clear();
+                            Fonts.Collection.Clear();
+                            List<string> paths = new();
+                            foreach(FontBox fontBox in WhatIsInFontContainer)
+                            {
+                                paths.Add(fontBox.MyFont.Path);
+                            }
+                            LoadMultiFont(paths);
+                            ShowFontContainer();
+                        }
+                        else
+                        {
+                            folder = CurrentFolder;
+                            IsInFavorite = false;
+                            ShowHeaderTextInputBox(folder);
+                            FillFontContainerWhenRouteBackFromFavorites();
+                        }
                     }
                 }
                 else
@@ -346,9 +407,7 @@ namespace FontExplorer.View
                     {
                         folder = PickFolderDialog.SelectedPath;
                         CurrentFolder = folder;
-
                         ShowHeaderTextInputBox(folder);
-
                         await LoadFontsFromPath(folder);
                     }
                 }
@@ -367,11 +426,10 @@ namespace FontExplorer.View
                 SwitchBarNav(this.NavBtnMyFav, this.NavBtnColorBlockMyFav);
 
                 IsInFavorite = true;   
-                ShowHeaderText(Settings.Settings.OpenFolderHeaderText);
                 ShowFontContainer();
-
                 ClearFontContainer();
                 FillFontContentFromFavorites();
+                ShowHeaderText(Settings.Settings.MyFavoriteHeaderText);
             }
             catch (Exception ex)
             {
@@ -477,35 +535,90 @@ namespace FontExplorer.View
                 if (e.Data != null)
                 {
                     string[] folders = (string[])e.Data.GetData(DataFormats.FileDrop);
-                    if (folders.Length == 1)
+
+                    static bool IsArrayIncludeMoreThanOneFolder(string[] folders)
                     {
-                        string folder = folders[0];
-                        if (Directory.Exists(folder))
+                        if(folders.Length == 1)
                         {
-                            CurrentFolder = folder;
-                            SwitchBarNav(this.NavBtnOpenFolder, this.NavBtnColorBlockOpenFolder);
-                            ShowHeaderTextInputBox(folder);
-                            ShowFontContainer();
-                            ClearFontContainer(); 
-                            await FillFontContainerFromPath(folder);
-                            if (this.FontContainer.Controls.Count > 0)
+                            string folder = folders[0];
+                            if (Directory.Exists(folder))
                             {
-                                this.FontContainer.ScrollControlIntoView(this.FontContainer.Controls[0]);
+                                return false;
                             }
+                            string file = folder;
+                            if (File.Exists(file))
+                            {
+                                return false;
+                            }
+                            return true;
                         }
                         else
                         {
-                            if (File.Exists(folder))
+                            int howmanyfiles = 0;
+                            foreach(string folder in folders)
+                            {
+                                if (Directory.Exists(folder))
+                                {
+                                    return true;
+                                }
+                                if (File.Exists(folder))
+                                {
+                                    howmanyfiles++;
+                                }
+                            }
+
+                            if(howmanyfiles == folders.Length)
+                            {
+                                return false;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    }
+
+                    if (IsArrayIncludeMoreThanOneFolder(folders))
+                    {
+                        await Notice("You can only drop one folder or multi-files here");
+                    }
+                    else
+                    {
+                        if(folders.Length == 1)
+                        {
+                            // Only One Folder
+                            string folder = folders[0];
+                            if (Directory.Exists(folder))
+                            {
+                                CurrentFolder = folder;
+                                SwitchBarNav(this.NavBtnOpenFolder, this.NavBtnColorBlockOpenFolder);
+                                ShowHeaderTextInputBox(folder);
+                                ShowFontContainer();
+                                ClearFontContainer();
+                                await FillFontContainerFromPath(folder);
+                                if (this.FontContainer.Controls.Count > 0)
+                                {
+                                    this.FontContainer.ScrollControlIntoView(this.FontContainer.Controls[0]);
+                                }
+                            }
+                            else
                             {
                                 string file = folder;
-                                if (Fonts.Init(file))
+                                if (File.Exists(file))
                                 {
-                                    if (await Fonts.Fill())
+                                    if (Fonts.Init(file))
                                     {
-                                        ShowFontContainer();
-                                        LoadSingleFont(file);
-                                        IsFromSingleFile = true;
-                                        CurrentSingleFile = file;
+                                        if (await Fonts.Fill())
+                                        {
+                                            ShowFontContainer();
+                                            LoadSingleFont(file);
+                                            IsFromSingleFile = true;
+                                            CurrentSingleFile = file;
+                                        }
+                                        else
+                                        {
+                                            await Notice("Fail to load this font");
+                                        }
                                     }
                                     else
                                     {
@@ -514,18 +627,18 @@ namespace FontExplorer.View
                                 }
                                 else
                                 {
-                                    await Notice("Fail to load this font");
+                                    await Notice("This folder does not exist");
                                 }
                             }
-                            else
-                            {
-                                await Notice("This folder does not exist");
-                            }
                         }
-                    }
-                    else
-                    {
-                        await Notice("You can only drop one folder here");
+                        else
+                        {
+                            // Many Files
+                            Fonts.Collection.Clear();
+                            this.FontContainer.Controls.Clear();
+                            LoadMultiFont(folders.ToList());
+                            IsFromMultiFile = true;
+                        }
                     }
                 }
             }
@@ -556,15 +669,32 @@ namespace FontExplorer.View
         {
             try
             {
-                string folder = this.HeaderTextInputBox.Text.Trim();
-                if (Directory.Exists(folder))
+                string destination = this.HeaderTextInputBox.Text.Trim();
+                if (Directory.Exists(destination))
                 {
+                    string folder = destination;
                     await LoadFontsFromPath(folder);
                 }
                 else
                 {
-                    ShowHeaderTextInputBox(CurrentFolder);
-                    await Notice("This folder does not exist");
+                    if (File.Exists(destination))
+                    {
+                        string file = destination;
+                        if (Fonts.Init(file))
+                        {
+                            if(await Fonts.Fill())
+                            {
+                                LoadSingleFont(file);
+                                IsFromSingleFile = true;
+                                CurrentSingleFile = file;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ShowHeaderTextInputBox(CurrentFolder);
+                        await Notice("This file or folder does not exist");
+                    }
                 }
             }
             catch (Exception ex)
