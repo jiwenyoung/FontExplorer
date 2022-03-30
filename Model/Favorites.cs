@@ -30,8 +30,11 @@
                 {
                     foreach(string file in files)
                     {
-                        MyFont thisfont = new(file);
-                        Pool.Add(thisfont);
+                        if(file.EndsWith(".ttf") || file.EndsWith(".otf"))
+                        {
+                            MyFont thisfont = new(file);
+                            Pool.Add(thisfont);
+                        }
                     }
                 }
                 return true;

@@ -51,6 +51,8 @@
         internal static string AddToFavoritesFail = "Failed to add to Favorites";
         internal static string RemoveFromFavoritesFail = "Failed to remove from Favorites";
 
+        internal static string FontIsSystemInstalled = "Some fonts have been already installed on system";
+
         internal static void SetLanguageOfCN()
         {
             DefaultSampleText = "测试文本";
@@ -76,6 +78,8 @@
 
             AddToFavoritesFail = "加入收藏失败";
             RemoveFromFavoritesFail = "从收藏移除字体失败";
+
+            FontIsSystemInstalled = "一些字体已经安装在系统上了";
         }
 
         internal static bool IsChiniese()

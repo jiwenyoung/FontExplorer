@@ -186,13 +186,15 @@ namespace FontExplorer.View
             Btn.ForeColor = Settings.Settings.CurrentColor;
         }
 
-        internal void FillFontContainer(List<MyFont> collection, bool isRecoverFromMyFavorite = false)
+        internal async void FillFontContainer(List<MyFont> collection, bool isRecoverFromMyFavorite = false)
         {
             if(isRecoverFromMyFavorite == false)
             {
                 WhatIsInFontContainer.Clear();
             }
             int index = 1;
+
+            List<MyFont> installed = new();
 
             foreach (MyFont font in collection)
             {
@@ -213,6 +215,15 @@ namespace FontExplorer.View
                     fontbox.Show();
                     index++;
                 }
+                else
+                {
+                    installed.Add(font);
+                }
+            }
+
+            if(installed.Count > 0)
+            {
+                await Notice("Some fonts have been already installed on system");
             }
         }
 
