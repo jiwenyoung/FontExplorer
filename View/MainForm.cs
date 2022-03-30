@@ -1,5 +1,4 @@
 ﻿using FontExplorer.Model;
-using System.Diagnostics;
 
 namespace FontExplorer.View
 {
@@ -41,6 +40,37 @@ namespace FontExplorer.View
             this.HeaderTextInputBox.BackColor = primary;
         }
 
+        private static void SetLanguage()
+        {
+            if(Settings.Settings.IsChiniese())
+            {
+                Settings.Settings.SetLanguageOfCN();
+            }
+        }
+
+        private void SetBarBtnText()
+        {
+            this.NavBtnOpenFolder.Text = Settings.Settings.OpenFolderBtnText;
+            this.NavBtnMyFav.Text = Settings.Settings.MyFavoritesBtnText;
+        }
+
+        private void SetMainFormCaption()
+        {
+            this.Text = Settings.Settings.Name;
+        }
+
+        private void SetSampleInputLabelAndSeachLabel()
+        {
+            this.SampleTextLabel.Text = Settings.Settings.SampleTextLabelText;
+            this.SearchLabel.Text = Settings.Settings.SearchLabelText;
+        }
+
+        private void SetHeaderText()
+        {
+            this.HeaderTextInputBox.Hide();
+            this.HeaderText.Text = Settings.Settings.Name;
+        }
+
         private void DisplayDragHerePic() 
         {
             if(DragHerePanel != null)
@@ -54,7 +84,14 @@ namespace FontExplorer.View
                 DragHerePic.Anchor = AnchorStyles.None;
                 DragHerePic.Width = 300;
                 DragHerePic.Height = 100;
-                DragHerePic.Image = Properties.Resources.draghere;
+                if (Settings.Settings.IsChiniese())
+                {
+                    DragHerePic.Image = Properties.Resources.draghereCN;
+                }
+                else
+                {
+                    DragHerePic.Image = Properties.Resources.draghere;
+                }
                 int x = (DragHerePanel.Width - DragHerePic.Width) / 2;
                 int y = (DragHerePanel.Height - DragHerePic.Height) / 2;
                 DragHerePic.Location = new Point(x, y);
@@ -230,11 +267,11 @@ namespace FontExplorer.View
             {
                 if (folder == favoriteFontFolder)
                 {
-                    await Notice("Favorite Folder can not be opened here");
+                    await Notice(Settings.Settings.FavoriteFolderNotOpenHere);
                 }
                 if (folder == systemFontFolder)
                 {
-                    await Notice("System Font Folder can not be opened here");
+                    await Notice(Settings.Settings.SystemFolderNotOpenHere);
                 }
             }
         }
@@ -324,11 +361,14 @@ namespace FontExplorer.View
         {
             try
             {
+                SetLanguage();
+                SetMainFormCaption();
+                SetBarBtnText();
+                SetSampleInputLabelAndSeachLabel();
+                SetHeaderText();
                 SetColor();
                 DisplayDragHerePic();
                 Responsive();
-                this.HeaderTextInputBox.Hide();
-                this.HeaderText.Text = Settings.Settings.Name;
                 await Favorites.SyncFavorites();
             }
             catch (Exception ex)
@@ -458,9 +498,9 @@ namespace FontExplorer.View
             try
             {
                 string SampleText = SampleExampleInput.Text;
-                if (SampleText.Length > 10)
+                if (SampleText.Length > Settings.Settings.SampleTextLenght)
                 {
-                    SampleText = SampleText[..10];
+                    SampleText = SampleText[..Settings.Settings.SampleTextLenght];
                 }
                 foreach (FontBox fontbox in this.FontContainer.Controls)
                 {
@@ -580,7 +620,7 @@ namespace FontExplorer.View
 
                     if (IsArrayIncludeMoreThanOneFolder(folders))
                     {
-                        await Notice("You can only drop one folder or multi-files here");
+                        await Notice(Settings.Settings.OnlyOneFolderDropHere);
                     }
                     else
                     {
@@ -617,17 +657,17 @@ namespace FontExplorer.View
                                         }
                                         else
                                         {
-                                            await Notice("Fail to load this font");
+                                            await Notice(Settings.Settings.ReadFontsFail);
                                         }
                                     }
                                     else
                                     {
-                                        await Notice("Fail to load this font");
+                                        await Notice(Settings.Settings.ReadFontsFail);
                                     }
                                 }
                                 else
                                 {
-                                    await Notice("This folder does not exist");
+                                    await Notice(Settings.Settings.FolderNotExist);
                                 }
                             }
                         }
@@ -693,7 +733,7 @@ namespace FontExplorer.View
                     else
                     {
                         ShowHeaderTextInputBox(CurrentFolder);
-                        await Notice("This file or folder does not exist");
+                        await Notice(Settings.Settings.FolderNotExist);
                     }
                 }
             }

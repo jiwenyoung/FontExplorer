@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing.Text;
+﻿using System.Drawing.Text;
 using System.Runtime.InteropServices;
 
 namespace FontExplorer.Model
@@ -41,14 +39,12 @@ namespace FontExplorer.Model
             if (File.Exists(fontfile))
             {
                 int result = AddFontResource(fontfile);
-                int error = Marshal.GetLastWin32Error();
                 if (result != 0)
                 {
                     return true;
                 }
                 else
                 {
-                    Debug.WriteLine(new Win32Exception(error).Message);
                     return false;
                 }
             }
@@ -68,14 +64,12 @@ namespace FontExplorer.Model
             else
             {
                 int result = RemoveFontResource(fontfile);
-                int error = Marshal.GetLastWin32Error();
                 if (result != 0)
                 {
                     return true;
                 }
                 else
                 {
-                    Debug.WriteLine(new Win32Exception(error).Message);
                     return false;
                 }
             }

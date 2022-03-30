@@ -60,7 +60,7 @@
             this.LoadBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LoadBtn.ForeColor = System.Drawing.Color.White;
             this.LoadBtn.Image = global::FontExplorer.Properties.Resources.load;
-            this.LoadBtn.Location = new System.Drawing.Point(450, 30);
+            this.LoadBtn.Location = new System.Drawing.Point(650, 30);
             this.LoadBtn.Name = "LoadBtn";
             this.LoadBtn.Size = new System.Drawing.Size(40, 40);
             this.LoadBtn.TabIndex = 1;
@@ -87,7 +87,7 @@
             this.FavoriteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FavoriteBtn.ForeColor = System.Drawing.Color.White;
             this.FavoriteBtn.Image = global::FontExplorer.Properties.Resources.favorite;
-            this.FavoriteBtn.Location = new System.Drawing.Point(500, 30);
+            this.FavoriteBtn.Location = new System.Drawing.Point(700, 30);
             this.FavoriteBtn.Name = "FavoriteBtn";
             this.FavoriteBtn.Size = new System.Drawing.Size(40, 40);
             this.FavoriteBtn.TabIndex = 3;
@@ -106,7 +106,7 @@
             this.UnloadBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.UnloadBtn.ForeColor = System.Drawing.Color.White;
             this.UnloadBtn.Image = global::FontExplorer.Properties.Resources.unload;
-            this.UnloadBtn.Location = new System.Drawing.Point(450, 30);
+            this.UnloadBtn.Location = new System.Drawing.Point(650, 30);
             this.UnloadBtn.Margin = new System.Windows.Forms.Padding(0);
             this.UnloadBtn.Name = "UnloadBtn";
             this.UnloadBtn.Size = new System.Drawing.Size(40, 40);
@@ -126,7 +126,7 @@
             this.UnfavoriteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.UnfavoriteBtn.ForeColor = System.Drawing.Color.White;
             this.UnfavoriteBtn.Image = global::FontExplorer.Properties.Resources.unfavorite;
-            this.UnfavoriteBtn.Location = new System.Drawing.Point(500, 30);
+            this.UnfavoriteBtn.Location = new System.Drawing.Point(700, 30);
             this.UnfavoriteBtn.Name = "UnfavoriteBtn";
             this.UnfavoriteBtn.Size = new System.Drawing.Size(40, 40);
             this.UnfavoriteBtn.TabIndex = 5;
@@ -148,7 +148,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(87)))), ((int)(((byte)(96)))), ((int)(((byte)(111)))));
-            this.ClientSize = new System.Drawing.Size(570, 100);
+            this.ClientSize = new System.Drawing.Size(770, 100);
             this.ControlBox = false;
             this.Controls.Add(this.FontColorBlock);
             this.Controls.Add(this.FontNameLabel);

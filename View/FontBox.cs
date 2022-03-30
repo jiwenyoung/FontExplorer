@@ -64,7 +64,7 @@ namespace FontExplorer.View
                 this.FavoriteBtn.Show();
             }
             
-            this.SampleText.Text = Settings.Settings.DefaultSampleTextOfEnglish;
+            this.SampleText.Text = Settings.Settings.DefaultSampleText;
             this.SampleText.Font = this.MyFont.Get(Settings.Settings.SampleTextFontSize);
             this.SampleText.Show();
             this.FontNameLabel.Text = this.MyFont.Name;
@@ -82,12 +82,12 @@ namespace FontExplorer.View
                 }
                 else
                 {
-                    await Notice("Add Font Failed");
+                    await Notice(Settings.Settings.AddFontFail);
                 }
             }
             else
             {
-                await Notice("Load Font Failed");
+                await Notice(Settings.Settings.LoadFontFail);
             }
         }
 
@@ -103,12 +103,12 @@ namespace FontExplorer.View
                 }
                 else
                 {
-                    await Notice("Remove Fonts Failed");
+                    await Notice(Settings.Settings.ReadFontsFail);
                 }
             }
             else
             {
-                await Notice("Unload Fonts Failed");
+                await Notice(Settings.Settings.UnloadFontFail);
             }
         }
 
@@ -121,7 +121,7 @@ namespace FontExplorer.View
             }
             else
             {
-                await Notice("Failed to remove from Favorites");
+                await Notice(Settings.Settings.RemoveFromFavoritesFail);
             }
         }
 
@@ -134,7 +134,7 @@ namespace FontExplorer.View
             }
             else
             {
-                await Notice("Failed to add to Favorites");
+                await Notice(Settings.Settings.AddToFavoritesFail);
             }
         }
     }
