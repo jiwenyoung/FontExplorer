@@ -10,7 +10,7 @@ So, I write this small application.
 
 This app only include one single exe file.
 
-First, download it and save it to a folder, and run the single exe file, it will create a folder named "My Favorites" in the same folder, and this is where your favorites fonts will be saved.
+First, [download](https://github.com/jiwenyoung/FontExplorer/releases/download/First_Version_1.0.0/FontExplorer.exe) it and save it to a folder, and run the single exe file, it will create a folder named "My Favorites" in the same folder, and this is where your favorites fonts will be saved.
 
 Click "Open Folder" button or directly drap a folder into it, and it will show the fonts preview in the folder you choose or drag in. You can also drag single font file or multi font files to preview and perform some other operation like load.
 
@@ -34,7 +34,7 @@ Okay, that's all until now, enjoy it.
 
 这是一个单exe程序。
 
-下载它，把它放入你想要的文件夹，然后运行它。 它会创建一个"My Favorites"文件夹, 你收藏的字体会存在这里面。
+[下载](https://github.com/jiwenyoung/FontExplorer/releases/download/First_Version_1.0.0/FontExplorer.exe)它，把它放入你想要的文件夹，然后运行它。 它会创建一个"My Favorites"文件夹, 你收藏的字体会存在这里面。
 
 单击侧边栏的“打开文件夹”按钮, 选择一个文件夹，这个程序会显示此文件夹下的所有字体文件的预览，你也可以拖拽一个文件夹或者一个/多个文件进来
 
