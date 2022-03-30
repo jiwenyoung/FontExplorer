@@ -223,7 +223,7 @@ namespace FontExplorer.View
 
             if(installed.Count > 0)
             {
-                await Notice("Some fonts have been already installed on system");
+                await Notice(Settings.Settings.FontIsSystemInstalled);
             }
         }
 
